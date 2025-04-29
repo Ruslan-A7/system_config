@@ -34,7 +34,7 @@ class ConfigSourceOptions {
      * Рекомендується використовувати константу NS (що містить знак більше '>' або крапку '.'),
      * але якщо в джерелі використовується інший роздільник замість NS, то такому джерелу можна задати свій роздільник.
      */
-    public protected(set) string $ns {
+    public protected(set) string $ns = NS {
         get => $this->ns;
     }
 
@@ -78,7 +78,7 @@ class ConfigSourceOptions {
     public function __construct(
         SourceTypeEnum $type = SourceTypeEnum::File,
         bool $createSourceIfNotFound = false,
-        string $ns = '>',
+        string $ns = NS,
         bool $addCommentBeforeGroupInFile = false,
         bool $strictSetter = false,
         bool $finalConfig = false) {
