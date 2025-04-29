@@ -1,0 +1,35 @@
+{
+    "name": "ra7/system_config",
+    "description": "A configuration module that can consist of sources of different types in any quantity",
+    "type": "library",
+    "keywords": [
+        "config",
+        "configuration",
+        "ra7-ofl",
+        "ra7",
+        "Ruslan_A7"
+    ],
+    "homepage": "https://dev.iuid.cc/projects/framework/system/config",
+    "license": "proprietary",
+    "_comment": [
+        "License: RA7 Open Free License"
+    ],
+    "authors": [
+        {
+            "name": "Ruslan_A7 (RA7)",
+            "homepage": "https://ra7.iuid.cc",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "RA7\\Framework\\System\\Config\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8",
+        "ra7/structure_singleton": "*"
+    }
+}
