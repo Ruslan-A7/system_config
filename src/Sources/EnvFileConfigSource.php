@@ -56,10 +56,7 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
     }
 
     public function save(): bool {
-        if ($this->options->finalConfig) {
-            throw new Exception('Джерело конфігурації "' . $this->path . '" є остаточним - будь-яка модифікація заборонена!
-            Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації!');
-        }
+        $this->throwExceptionIfFinal();
 
         $this->loaded ? /* skip */ : $this->load();
 
@@ -108,7 +105,7 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
 
 
 
-    protected function createSourceIfNotFound(): bool {
+    protected function createSource(): bool {
         return file_put_contents($this->path, '');
     }
 

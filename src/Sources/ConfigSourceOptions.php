@@ -2,6 +2,8 @@
 
 namespace RA7\Framework\System\Config\Sources;
 
+use Exception;
+
 /**
  * Опції джерела конфігурації.
  * Можна використовувати для додаткового налаштування самого джерела
@@ -34,7 +36,7 @@ class ConfigSourceOptions {
      * Рекомендується використовувати константу NS (що містить знак більше '>' або крапку '.'),
      * але якщо в джерелі використовується інший роздільник замість NS, то такому джерелу можна задати свій роздільник.
      */
-    public protected(set) string $ns = NS {
+    public protected(set) string $ns {
         get => $this->ns;
     }
 
@@ -58,8 +60,8 @@ class ConfigSourceOptions {
      * Якщо значення = true, то при спробі модифікувати це джерело буде викинуто помилку.
      * Це розповсюджується тільки на зміни через об'єкт цього джерела і не розповсюджується на ручну зміну файлу або бази даних.
      */
-    public protected(set) bool $finalConfig {
-        get => $this->finalConfig;
+    public protected(set) bool $final {
+        get => $this->final;
     }
 
 
@@ -73,7 +75,7 @@ class ConfigSourceOptions {
      * а також для масивів та інших структур
      * @param bool $addCommentBeforeGroupInFile визначає необхідність додавати коментар з назвою групи перед групою ключів
      * @param bool $strictSetter визначає, чи допускається створення нових елементів при спробі встановити значення для неіснуючого ключа через метод set
-     * @param bool $finalConfig визначає, чи допускається модифікація цього джерела
+     * @param bool $final визначає, чи допускається модифікація цього джерела
      */
     public function __construct(
         SourceTypeEnum $type = SourceTypeEnum::File,
@@ -81,15 +83,30 @@ class ConfigSourceOptions {
         string $ns = NS,
         bool $addCommentBeforeGroupInFile = false,
         bool $strictSetter = false,
-        bool $finalConfig = false) {
+        bool $final = false) {
 
         $this->type = $type;
         $this->createSourceIfNotFound = $createSourceIfNotFound;
         $this->ns = $ns;
         $this->addCommentBeforeGroupInFile = $addCommentBeforeGroupInFile;
         $this->strictSetter = $strictSetter;
-        $this->finalConfig = $finalConfig;
+        $this->final = $final;
 
+    }
+
+    /**
+     * Визначити значення вказаної властивості.
+     * Тип значення має відповідати типу властивості!
+     */
+    public function set(string $propName, $value) {
+        $this->final !== true ? /* skip */ : throw new Exception('Це джерело конфігурації є остаточним - будь-яка модифікація заборонена!
+            Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації'); 
+
+        if (property_exists($this, $propName)) {
+            $this->$propName = $value;
+        } else {
+            throw new Exception('Опції конфігурацій не мають властивості: ' . $propName);
+        }
     }
 
 }

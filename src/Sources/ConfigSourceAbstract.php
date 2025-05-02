@@ -17,20 +17,6 @@ use Exception;
  */
 abstract class ConfigSourceAbstract implements ConfigSourceInterface {
 
-    /**
-     * Шлях до файлу джерела (для файлових джерел)
-     * або шлях до таблиці в БД типу databaseName>tableName (при цьому ОБОВ'ЯЗКОВО передати відповідний тип джерела в опції),
-     * де замість '>' використовується роздільник вкладеності згідно $this->ns (для джерел з БД),
-     * або інший ідентифікатор для швидкого пошуку місця розташування джерела
-     */
-    //!!! можливо є сенс перенести шлях в файловий ресурс, а для БД створити окремий ресурс з таблицею, полем та інш. ???
-    public protected(set) string $path {
-        get => $this->path;
-    }
-
-    /** Масив даних */
-    protected array $data = [];
-
     /** Статус завантаження цього джерела */
     public protected(set) bool $loaded = false {
         get => $this->loaded;
@@ -41,23 +27,25 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
         get => $this->options;
     }
 
+    /** Масив даних */
+    protected array $data = [];
+
 
 
     /**
      * Створити джерело конфігурації.
      *
-     * @param string $path шлях до файлу джерела (для файлових джерел)
-     * або шлях до таблиці в БД типу databaseName>tableName,
-     * де замість '>' використовується роздільник вкладеності згідно $this->options->ns (для джерел з БД),
-     * або інший ідентифікатор для швидкого пошуку місця розташування джерела
      * @param ConfigSourceOptions $options опції джерела конфігурації
      */
-    public function __construct(string $path, ?ConfigSourceOptions $options = null) {
-        $this->path = $path;
-        $this->options = $options ? $options : new ConfigSourceOptions();
+    public function __construct(ConfigSourceOptions $options = new ConfigSourceOptions()) {
+        $this->options = $options;
     }
 
 
+
+    public function getId(): string {
+        return __FILE__ . ' #' . __LINE__;
+    }
 
     public function get(string $key, $default = null) {
         $this->loaded ? /* skip */ : $this->load();
@@ -76,10 +64,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
     }
 
     public function set(string $key, $value): void {
-        if ($this->options->finalConfig) {
-            throw new Exception('Джерело конфігурації "' . $this->path . '" є остаточним - будь-яка модифікація заборонена!
-            Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації!');
-        }
+        $this->throwExceptionIfFinal();
 
         $this->loaded ? /* skip */ : $this->load();
 
@@ -89,8 +74,8 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
         foreach ($segments as $segment) {
             if (empty($ref[$segment]) || !is_array($ref[$segment])) {
                 if ($this->options->strictSetter) {
-                    throw new Exception('Для джерела конфігурації "' . $this->path . '" обмежено можливість додавання нових елементів!
-                    Для скасування цього правила потрібно перевизначити його в опціях джерела!');
+                    throw new Exception('Для джерела конфігурації "' . $this->getId() . '" обмежено можливість додавання нових елементів!
+                    Для скасування цього правила потрібно перевизначити значення strictSetter в опціях джерела на false!');
                 }
                 $ref[$segment] = [];
             }
@@ -130,7 +115,19 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
 
 
 
-    /** Створити порожнє джерело конфігурації згідно очікуваного типу даних в ньому якщо воно не знайдено */
-    protected abstract function createSourceIfNotFound(): bool;
+    /** Викинути виняток якщо це джерело визначено остаточним */
+    protected function throwExceptionIfFinal(): void {
+        if ($this->options->final) {
+            throw new Exception('Джерело конфігурації "' . $this->getId() . '" є остаточним - будь-яка модифікація заборонена!
+            Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації!');
+        }
+    }
+
+    /**
+     * Створити порожнє джерело конфігурації згідно очікуваного типу даних в ньому.
+     * Призначено на випадок якщо джерело не знайдено при ініціалізації,
+     * а в опціях зазначено необхідність автоматичного створення джерела в таких випадках!
+     */
+    protected abstract function createSource(): bool;
 
 }

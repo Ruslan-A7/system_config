@@ -30,7 +30,7 @@ class DefinedFileConfigSource extends FileConfigSourceAbstract {
             $newKeys = array_diff_key($definedAfter, $definedBefore);
 
             // Перевіряємо, чи визначено хоч якусь константу в джерелі
-            !empty($newKeys) ? /* skip */ : throw new Exception("Файл конфігурації \"{$this->path}\" не визначає жодної php-константи!");
+            !empty($newKeys) ? /* skip */ : throw new Exception('Джерело конфігурації "' . $this->getId() . '" не визначає жодної php-константи!');
 
             // Формуємо масив нових констант
             foreach ($newKeys as $key => $_) {
@@ -42,10 +42,7 @@ class DefinedFileConfigSource extends FileConfigSourceAbstract {
     }
 
     public function save(): bool {
-        if ($this->options->finalConfig) {
-            throw new Exception('Джерело конфігурації "' . $this->path . '" є остаточним - будь-яка модифікація заборонена!
-            Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації!');
-        }
+        $this->throwExceptionIfFinal();
 
         $this->loaded ? /* skip */ : $this->load();
 
@@ -62,7 +59,7 @@ class DefinedFileConfigSource extends FileConfigSourceAbstract {
 
 
 
-    protected function createSourceIfNotFound(): bool {
+    protected function createSource(): bool {
         return file_put_contents($this->path, "<?php\n");
     }
 

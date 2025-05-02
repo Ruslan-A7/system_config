@@ -12,13 +12,6 @@ namespace RA7\Framework\System\Config\Sources;
  */
 interface ConfigSourceInterface {
 
-    /**
-     * Шлях до файлу джерела (для файлових джерел)
-     * або шлях до таблиці в БД типу databaseName>tableName (при цьому ОБОВ'ЯЗКОВО передати відповідний тип джерела в опції),
-     * де замість '>' використовується роздільник вкладеності згідно $this->options->ns (для джерел з БД)
-     */
-    public string $path {get;}
-
     /** Статус завантаження цього джерела */
     public bool $loaded {get;}
 
@@ -27,20 +20,16 @@ interface ConfigSourceInterface {
 
 
 
-    /**
-     * Створити джерело конфігурації.
-     *
-     * @param string $path шлях до файлу джерела (для файлових джерел)
-     * або шлях до таблиці в БД типу databaseName>tableName,
-     * де замість '>' використовується роздільник вкладеності згідно $this->options->ns (для джерел з БД)
-     * @param ?ConfigSourceOptions $options опції джерела конфігурації
-     */
-    public function __construct(string $path, ?ConfigSourceOptions $options = null);
-
-
-
     /** Отримати масив з усіма даними цього джерела конфігурації (за потреби завантажує їх з файлу/БД) */
     public function load(): array;
+
+    /**
+     * Отримати шлях до файлу джерела (для файлових джерел)
+     * або шлях до таблиці в БД типу databaseName>tableName (при цьому ОБОВ'ЯЗКОВО передати відповідний тип джерела в опції),
+     * де замість '>' використовується роздільник вкладеності згідно $this->ns (для джерел з БД),
+     * або інший ідентифікатор для швидкого пошуку місця розташування джерела
+     */
+    public function getId(): string;
 
     /** Отримати значення за ключем (з підтримкою вкладених ключів через роздільник вкладеності згідно $this->options->ns) */
     public function get(string $key, $default = null);

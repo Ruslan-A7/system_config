@@ -19,7 +19,7 @@ class ArrayFileConfigSource extends FileConfigSourceAbstract {
             $data = include $this->path;
 
             // Перевіряємо, чи повертає джерело масив
-            is_array($data) ? /* skip */ : throw new Exception("Файл конфігурації \"{$this->path}\" не повертає масив!");
+            is_array($data) ? /* skip */ : throw new Exception('Джерело конфігурації "' . $this->getId() . '" не повертає масив!');
 
             $this->data = $data;
             $this->loaded = true;
@@ -29,10 +29,7 @@ class ArrayFileConfigSource extends FileConfigSourceAbstract {
 
     /** Зберегти поточний масив у файл (перегенерувати повністю) */
     public function save(): bool {
-        if ($this->options->finalConfig) {
-            throw new Exception('Джерело конфігурації "' . $this->path . '" є остаточним - будь-яка модифікація заборонена!
-            Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації!');
-        }
+        $this->throwExceptionIfFinal();
 
         $this->loaded ? /* skip */ : $this->load();
 
@@ -44,7 +41,7 @@ class ArrayFileConfigSource extends FileConfigSourceAbstract {
 
 
 
-    protected function createSourceIfNotFound(): bool {
+    protected function createSource(): bool {
         return file_put_contents($this->path, "<?php\nreturn [];");
     }
 
