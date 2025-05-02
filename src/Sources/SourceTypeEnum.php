@@ -21,4 +21,7 @@ enum SourceTypeEnum: int {
     /** Джерело з вбудованого PHP-коду (PHP-масив переданий при створенні джерела або при його оновленні) */
     case BuiltInCode = 3;
 
+    /** Джерело з власного PHP-класу */
+    case CustomClass = 4;
+
 }
