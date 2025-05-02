@@ -2,14 +2,11 @@
 
 namespace RA7\Framework\System\Config;
 
-use Exception;
 use RA7\Framework\Structure\Singleton\SingletonTrait;
 use RA7\Framework\System\Config\Sources\ConfigSourceInterface;
 
 /**
  * Базовий універсальний клас конфігурації, що може складатися з джерел різних типів в будь-якій кількості.
- * 
- * TODO: Додати функціонал для приватних конфігурацій при доступі до яких буде перевірятись наявність певних прав доступу (для захисту від несанкціонованого доступу до приватних даних типу паролів БД з боку менеджерів/модераторів додатку)
  *
  * @author Ruslan_A7 (RA7) <https://ra7.iuid.cc>
  * Код може містити деякі частини, що були створені за допомогою ChatGPT.
@@ -29,20 +26,6 @@ class Config implements ConfigInterface {
      * @var array<string, ConfigSourceInterface>
      */
     public protected(set) array $sources = [];
-
-    /**
-     * !!! Масив приватних джерел конфігурації при доступі до яких буде перевірятись наявність певних прав доступу заданих при їх ініціалізації
-     * !!! Незавершений експериментальний функціонал !!!
-     * @var array<string, PrivateConfigSourceInterface>
-     */
-    public protected(set) array $privateSources = [] {
-        get {
-            // !!! ЕКСПЕРИМЕНТАЛЬНИЙ ФУНКЦІОНАЛ !!! Потребує модифікації!
-            // !!! ЕКСПЕРИМЕНТАЛЬНИЙ ФУНКЦІОНАЛ !!! Потребує модифікації!
-            // !!! ЕКСПЕРИМЕНТАЛЬНИЙ ФУНКЦІОНАЛ !!! Потребує модифікації!
-            !empty($access) ? $this->privateSources : throw new Exception('Access denied!');
-        }
-    }
 
 
 

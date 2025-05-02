@@ -32,7 +32,7 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
                 $key = trim($key);
                 $value = trim($value);
 
-                $segments = explode(NS, $key);
+                $segments = explode($this->options->ns, $key);
                 $ref = &$data;
 
                 foreach ($segments as $i => $segment) {
@@ -69,11 +69,11 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
         $flatData = $this->flatten($this->data);
 
         if (!empty($this->options->addCommentBeforeGroupInFile)) {
-            // Групуємо за першою частиною ключа (до першого NS)
+            // Групуємо за першою частиною ключа (до першого $this->options->ns)
             $groups = [];
 
             foreach ($flatData as $fullKey => $value) {
-                $parts = explode(NS, $fullKey);
+                $parts = explode($this->options->ns, $fullKey);
                 $group = $parts[0];
         
                 if (!isset($groups[$group])) {
@@ -86,7 +86,7 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
             // Формуємо блоки
             foreach ($groups as $group => $items) {
                 // Додаємо коментар, якщо є вкладені ключі
-                if (count($items) > 1 || strpos(array_key_first($items), NS) !== false) {
+                if (count($items) > 1 || strpos(array_key_first($items), $this->options->ns) !== false) {
                     $lines[] = ""; // Порожній рядок перед групою
                     $lines[] = "# {$group}";
                 }
@@ -113,14 +113,14 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
     }
 
     /**
-     * Рекурсивно пройти по масиву і повернути "плаский" (однорівневий) масив з ключами що підтримують вкладеність згідно NS
+     * Рекурсивно пройти по масиву і повернути "плаский" (однорівневий) масив з ключами що підтримують вкладеність згідно $this->options->ns
      * (тобто вкладеність масиву перетворюється на рядки типу key>nestedKey=value для коректного збереження в рядковому форматі .env-файлів).
      */
     protected function flatten(array $data, string $prefix = ''): array {
         $result = [];
 
         foreach ($data as $key => $value) {
-            $fullKey = $prefix === '' ? $key : $prefix . NS . $key;
+            $fullKey = $prefix === '' ? $key : $prefix . $this->options->ns . $key;
 
             if (is_array($value)) {
                 $result += $this->flatten($value, $fullKey);

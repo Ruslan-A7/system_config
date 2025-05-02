@@ -48,7 +48,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
      *
      * @param string $path шлях до файлу джерела (для файлових джерел)
      * або шлях до таблиці в БД типу databaseName>tableName,
-     * де замість '>' використовується роздільник вкладеності згідно NS (для джерел з БД),
+     * де замість '>' використовується роздільник вкладеності згідно $this->options->ns (для джерел з БД),
      * або інший ідентифікатор для швидкого пошуку місця розташування джерела
      * @param ConfigSourceOptions $options опції джерела конфігурації
      */
@@ -103,7 +103,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
     public function delete(string $key): void {
         $this->loaded ? /* skip */ : $this->load();
 
-        $keys = explode(NS, $key);
+        $keys = explode($this->options->ns, $key);
         $data =& $this->data;
     
         while (count($keys) > 1) {

@@ -21,13 +21,6 @@ interface ConfigInterface extends SingletonInterface {
      */
     public array $sources {get;}
 
-    /**
-     * !!! Масив приватних джерел конфігурації при доступі до яких буде перевірятись наявність певних прав доступу заданих при їх ініціалізації
-     * !!! Незавершений експериментальний функціонал !!!
-     * @var array<string, PrivateConfigSourceInterface>
-     */
-    public array $privateSources {get;}
-
 
 
     /** Додати нове джерело конфігурації */
