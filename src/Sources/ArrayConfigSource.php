@@ -2,8 +2,6 @@
 
 namespace RA7\Framework\System\Config\Sources;
 
-use Exception;
-
 /**
  * Джерело конфігурації з php-масиву, що вбудований безпосередньо в код.
  *

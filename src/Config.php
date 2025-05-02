@@ -6,7 +6,7 @@ use RA7\Framework\Structure\Singleton\SingletonTrait;
 use RA7\Framework\System\Config\Sources\ConfigSourceInterface;
 
 /**
- * Базовий універсальний клас конфігурації, що може складатися з джерел різних типів в будь-якій кількості.
+ * Універсальний клас конфігурації, що може складатися з джерел різних типів в будь-якій кількості.
  *
  * @author Ruslan_A7 (RA7) <https://ra7.iuid.cc>
  * Код може містити деякі частини, що були створені за допомогою ChatGPT.
