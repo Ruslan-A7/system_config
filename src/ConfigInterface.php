@@ -23,6 +23,27 @@ interface ConfigInterface extends SingletonInterface {
 
 
 
+    /**
+     * Отримати значення за ключем із зазначеного джерела
+     * (з підтримкою вкладених ключів через роздільник вкладеності згідно $this->sources[$source]->options->ns).
+     *
+     * @throws Exception якщо джерело не знайдено
+     */
+    public function get(string $source, string $key, $default = null);
+
+    /**
+     * Отримати значення за ключем, за першим збігом, з будь-якого джерела
+     * (з підтримкою вкладених ключів через роздільник вкладеності згідно $this->sources[$source]->options->ns).
+     *
+     * @throws Exception якщо ключ не знайдено в жодному джерелі
+     */
+    public function getFirst(string $key, $default = null);
+
+    /** Отримати джерело конфігурації якщо воно є (інакше - false) */
+    public function getSource(string $name): ConfigSourceInterface|false;
+
+
+
     /** Додати нове джерело конфігурації */
     public function addSource(string $name, ConfigSourceInterface $source): void;
 

@@ -4,6 +4,7 @@ namespace RA7\Framework\System\Config;
 
 use RA7\Framework\Structure\Singleton\SingletonTrait;
 use RA7\Framework\System\Config\Sources\ConfigSourceInterface;
+use Exception;
 
 /**
  * Універсальний клас конфігурації, що може складатися з джерел різних типів в будь-якій кількості.
@@ -36,6 +37,29 @@ class Config implements ConfigInterface {
      */
     private function __construct(array $sources = []) {
         $this->sources = $sources;
+    }
+
+
+
+    public function get(string $source, string $key, $default = null) {
+        if (!empty($this->sources[$source])) {
+            return $this->sources[$source]->get($key, $default);
+        } else {
+            throw new Exception('Джерело конфігурації з назвою "' . $source . '" не знайдено!');
+        }
+    }
+
+    public function getFirst(string $key, $default = null) {
+        foreach ($this->sources as $source) {
+            if ($source->get($key, null)) {
+                return $source->get($key, $default);
+            }
+        }
+        throw new Exception('Ключ "' . $key . '" не знайдено в жодному джерелі конфігурації!');
+    }
+
+    public function getSource(string $name): ConfigSourceInterface|false {
+        return $this->sources[$name] ?? false;
     }
 
 
