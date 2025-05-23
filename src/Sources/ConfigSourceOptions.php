@@ -2,7 +2,7 @@
 
 namespace RA7\Framework\System\Config\Sources;
 
-use Exception;
+use RA7\Framework\System\Config\ConfigErrorException;
 
 /**
  * Опції джерела конфігурації.
@@ -99,13 +99,13 @@ class ConfigSourceOptions {
      * Тип значення має відповідати типу властивості!
      */
     public function set(string $propName, $value) {
-        $this->final !== true ? /* skip */ : throw new Exception('Це джерело конфігурації є остаточним - будь-яка модифікація заборонена!
+        $this->final !== true ? /* skip */ : throw new ConfigErrorException('Це джерело конфігурації є остаточним - будь-яка модифікація заборонена!
             Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації'); 
 
         if (property_exists($this, $propName)) {
             $this->$propName = $value;
         } else {
-            throw new Exception('Опції конфігурацій не мають властивості: ' . $propName);
+            throw new ConfigErrorException('Опції конфігурацій не мають властивості: ' . $propName);
         }
     }
 

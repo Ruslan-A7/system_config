@@ -2,7 +2,7 @@
 
 namespace RA7\Framework\System\Config\Sources;
 
-use Exception;
+use RA7\Framework\System\Config\ConfigErrorException;
 
 /**
  * Абстрактне файлове джерело конфігурації.
@@ -36,7 +36,7 @@ abstract class FileConfigSourceAbstract extends ConfigSourceAbstract implements 
                 if ($this->options->createSourceIfNotFound) {
                     $this->createSource();
                 } else {
-                    throw new Exception('Джерело конфігурації "' . $this->getId() . '" не знайдено!');
+                    throw new ConfigErrorException('Джерело конфігурації "' . $this->getId() . '" не знайдено!');
                 }
             }
         }

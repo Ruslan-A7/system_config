@@ -30,6 +30,8 @@
     },
     "require": {
         "php": "^8.4",
+        "ra7/system_enums": "*",
+        "ra7/system_exception": "*",
         "ra7/structure_singleton": "*",
         "ra7/utils_system": "*"
     }

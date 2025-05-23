@@ -2,7 +2,7 @@
 
 namespace RA7\Framework\System\Config\Sources;
 
-use Exception;
+use RA7\Framework\System\Config\ConfigErrorException;
 
 /**
  * Абстрактне джерело конфігурації.
@@ -74,7 +74,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
         foreach ($segments as $segment) {
             if (empty($ref[$segment]) || !is_array($ref[$segment])) {
                 if ($this->options->strictSetter) {
-                    throw new Exception('Для джерела конфігурації "' . $this->getId() . '" обмежено можливість додавання нових елементів!
+                    throw new ConfigErrorException('Для джерела конфігурації "' . $this->getId() . '" обмежено можливість додавання нових елементів!
                     Для скасування цього правила потрібно перевизначити значення strictSetter в опціях джерела на false!');
                 }
                 $ref[$segment] = [];
@@ -118,7 +118,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
     /** Викинути виняток якщо це джерело визначено остаточним */
     protected function throwExceptionIfFinal(): void {
         if ($this->options->final) {
-            throw new Exception('Джерело конфігурації "' . $this->getId() . '" є остаточним - будь-яка модифікація заборонена!
+            throw new ConfigErrorException('Джерело конфігурації "' . $this->getId() . '" є остаточним - будь-яка модифікація заборонена!
             Для скасування цього правила потрібно перевизначити відповідну опцію джерела при його ініціалізації!');
         }
     }

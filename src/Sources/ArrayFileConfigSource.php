@@ -2,7 +2,7 @@
 
 namespace RA7\Framework\System\Config\Sources;
 
-use Exception;
+use RA7\Framework\System\Config\ConfigErrorException;
 
 /**
  * Джерело конфігурації з файлу, що повертає PHP-масив.
@@ -19,7 +19,7 @@ class ArrayFileConfigSource extends FileConfigSourceAbstract {
             $data = include $this->path;
 
             // Перевіряємо, чи повертає джерело масив
-            is_array($data) ? /* skip */ : throw new Exception('Джерело конфігурації "' . $this->getId() . '" не повертає масив!');
+            is_array($data) ? /* skip */ : throw new ConfigErrorException('Джерело конфігурації "' . $this->getId() . '" не повертає масив!');
 
             $this->data = $data;
             $this->loaded = true;

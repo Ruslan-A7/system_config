@@ -2,7 +2,7 @@
 
 namespace RA7\Framework\System\Config\Sources;
 
-use Exception;
+use RA7\Framework\System\Config\ConfigErrorException;
 
 /**
  * Джерело конфігурації з файлу, що містить PHP-константи визначені через функцію define().
@@ -30,7 +30,7 @@ class DefinedFileConfigSource extends FileConfigSourceAbstract {
             $newKeys = array_diff_key($definedAfter, $definedBefore);
 
             // Перевіряємо, чи визначено хоч якусь константу в джерелі
-            !empty($newKeys) ? /* skip */ : throw new Exception('Джерело конфігурації "' . $this->getId() . '" не визначає жодної php-константи!');
+            !empty($newKeys) ? /* skip */ : throw new ConfigErrorException('Джерело конфігурації "' . $this->getId() . '" не визначає жодної php-константи!');
 
             // Формуємо масив нових констант
             foreach ($newKeys as $key => $_) {
