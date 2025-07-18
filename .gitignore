@@ -1,0 +1,6 @@
+# Незавершені генератори
+src/Generators/*
+
+# Готові генератори
+!src/Generators/DefinedFileGenerator.php
+!src/Generators/GeneratorInterface.php

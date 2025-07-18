@@ -1,6 +1,6 @@
 <?php
 
-namespace RA7\Framework\System\Config\Sources;
+namespace RA7\Framework\System\Config\Sources\FromFile;
 
 use RA7\Framework\System\Config\ConfigErrorException;
 
@@ -36,13 +36,13 @@ class ArrayFileConfigSource extends FileConfigSourceAbstract {
         $export = var_export($this->data, true);
         $content = "<?php\nreturn {$export};";
 
-        return file_put_contents($this->path, $content) !== false;
+        return createFile($this->path, $content);
     }
 
 
 
     protected function createSource(): bool {
-        return file_put_contents($this->path, "<?php\nreturn [];");
+        return createFile($this->path, "<?php\nreturn [];");
     }
 
 }

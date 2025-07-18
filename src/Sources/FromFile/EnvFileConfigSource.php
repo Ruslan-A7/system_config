@@ -1,6 +1,6 @@
 <?php
 
-namespace RA7\Framework\System\Config\Sources;
+namespace RA7\Framework\System\Config\Sources\FromFile;
 
 /**
  * Джерело конфігурації з .env-файлу.
@@ -30,7 +30,7 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
                 $key = trim($key);
                 $value = trim($value);
 
-                $segments = explode($this->options->ns, $key);
+                $segments = parseNesting($key, $this->options->ns);
                 $ref = &$data;
 
                 foreach ($segments as $i => $segment) {
@@ -68,7 +68,7 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
             $groups = [];
 
             foreach ($flatData as $fullKey => $value) {
-                $parts = explode($this->options->ns, $fullKey);
+                $parts = parseNesting($fullKey, $this->options->ns);
                 $group = $parts[0];
         
                 if (!isset($groups[$group])) {
@@ -98,13 +98,13 @@ class EnvFileConfigSource extends FileConfigSourceAbstract {
 
         $content = implode("\n", $lines);
 
-        return file_put_contents($this->path, $content) !== false;
+        return createFile($this->path, $content) !== false;
     }
 
 
 
     protected function createSource(): bool {
-        return file_put_contents($this->path, '');
+        return createFile($this->path, '');
     }
 
     /**

@@ -50,7 +50,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
     public function get(string $key, $default = null) {
         $this->loaded ? /* skip */ : $this->load();
 
-        $segments = explode($this->options->ns, $key);
+        $segments = parseNesting($key, $this->options->ns);
         $value = $this->data;
 
         foreach ($segments as $segment) {
@@ -68,7 +68,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
 
         $this->loaded ? /* skip */ : $this->load();
 
-        $segments = explode($this->options->ns, $key);
+        $segments = parseNesting($key, $this->options->ns);
         $ref = &$this->data;
 
         foreach ($segments as $segment) {
@@ -88,7 +88,7 @@ abstract class ConfigSourceAbstract implements ConfigSourceInterface {
     public function delete(string $key): void {
         $this->loaded ? /* skip */ : $this->load();
 
-        $keys = explode($this->options->ns, $key);
+        $keys = parseNesting($key, $this->options->ns);
         $data =& $this->data;
     
         while (count($keys) > 1) {

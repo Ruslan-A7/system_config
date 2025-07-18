@@ -1,7 +1,9 @@
 <?php
 
-namespace RA7\Framework\System\Config\Sources;
+namespace RA7\Framework\System\Config\Sources\FromFile;
 
+use RA7\Framework\System\Config\Sources\ConfigSourceAbstract;
+use RA7\Framework\System\Config\Sources\ConfigSourceOptions;
 use RA7\Framework\System\Config\ConfigErrorException;
 
 /**
@@ -15,7 +17,7 @@ use RA7\Framework\System\Config\ConfigErrorException;
  */
 abstract class FileConfigSourceAbstract extends ConfigSourceAbstract implements FileConfigSourceInterface {
 
-    /** Шлях до файлу джерела */
+    /** Шлях до файлу джерела (нормалізовано функцією `pathNormalize()` з пакета `ra7/utils_normalizers` при ініціалізації джерела) */
     public protected(set) string $path {
         get => $this->path;
     }
@@ -23,13 +25,13 @@ abstract class FileConfigSourceAbstract extends ConfigSourceAbstract implements 
     /**
      * Створити джерело конфігурації з файлу.
      *
-     * @param string $path шлях до файлу джерела
+     * @param string $path шлях до файлу джерела (автоматично нормалізується функцією `pathNormalize()` з пакета `ra7/utils_normalizers`)
      * @param ConfigSourceOptions $options опції джерела конфігурації
      */
     public function __construct(string $path, ConfigSourceOptions $options = new ConfigSourceOptions()) {
         parent::__construct($options);
 
-        $this->path = $path;
+        $this->path = pathNormalize($path);
 
         if (!file_exists($this->path)) {
             if (!empty($this->options->createSourceIfNotFound)) {

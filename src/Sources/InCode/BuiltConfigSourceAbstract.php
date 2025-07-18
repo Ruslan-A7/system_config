@@ -1,7 +1,10 @@
 <?php
 
-namespace RA7\Framework\System\Config\Sources;
+namespace RA7\Framework\System\Config\Sources\InCode;
 
+use RA7\Framework\System\Config\Sources\ConfigSourceAbstract;
+use RA7\Framework\System\Config\Sources\ConfigSourceOptions;
+use RA7\Framework\System\Config\Sources\SourceTypeEnum;
 use RA7\Framework\System\Config\ConfigErrorException;
 
 /**
@@ -34,8 +37,9 @@ abstract class BuiltConfigSourceAbstract extends ConfigSourceAbstract implements
     public function __construct(string $id, array $data = [], ConfigSourceOptions $options = new ConfigSourceOptions(type: SourceTypeEnum::BuiltInCode, final: true)) {
         parent::__construct($options);
         if ($this->options->type !== SourceTypeEnum::BuiltInCode) {
-            throw new ConfigErrorException('Всі джерела, що успадковують абстрактний клас вбудованого джерела конфігурації, обов\'язково повинні мати в опціях тип:
-            RA7\Framework\System\Config\Sources\SourceTypeEnum::BuiltInCode');
+            throw new ConfigErrorException(
+                'Всі джерела, що успадковують абстрактний клас вбудованого джерела конфігурації, обов\'язково повинні мати в опціях тип: ' . SourceTypeEnum::BuiltInCode
+            );
         }
         $this->id = $id;
         $this->data = $data;
@@ -46,10 +50,12 @@ abstract class BuiltConfigSourceAbstract extends ConfigSourceAbstract implements
     }
 
     /**
-     * !!! ВАЖЛИВО! Спроба зберегти зміни в конфігурації (оновити джерело) приведе до помилки адже вбудоване джерело змінювати заборонено!
+     * Зберегти зміни в конфігурації (оновити джерело).
+     *
+     * !!! ВАЖЛИВО! Спроба зберегти зміни в конфігурації (оновити джерело) через цей метод приведе до помилки адже вбудоване джерело змінювати заборонено!
      */
     public function save(): bool {
-        throw new ConfigErrorException('Вбудоване джерело конфігурації "' . $this->getId() . '" неможливо зберегти, навіть якщо воно не є остаточним, адже воно визначено в безпосередньо в коді!');
+        throw new ConfigErrorException('Вбудоване джерело конфігурації "' . $this->getId() . '" неможливо зберегти, навіть якщо воно не є остаточним, адже воно визначено безпосередньо в коді, і зміни потрібно вносити там же!');
         return  false;
     }
 

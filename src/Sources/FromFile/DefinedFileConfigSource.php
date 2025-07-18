@@ -1,6 +1,6 @@
 <?php
 
-namespace RA7\Framework\System\Config\Sources;
+namespace RA7\Framework\System\Config\Sources\FromFile;
 
 use RA7\Framework\System\Config\ConfigErrorException;
 
@@ -54,13 +54,13 @@ class DefinedFileConfigSource extends FileConfigSourceAbstract {
         }
 
         $content = implode("\n", $lines);
-        return file_put_contents($this->path, $content) !== false;
+        return createFile($this->path, $content) !== false;
     }
 
 
 
     protected function createSource(): bool {
-        return file_put_contents($this->path, "<?php\n");
+        return createFile($this->path, "<?php\n");
     }
 
 }

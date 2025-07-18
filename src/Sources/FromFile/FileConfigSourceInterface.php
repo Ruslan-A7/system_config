@@ -1,6 +1,9 @@
 <?php
 
-namespace RA7\Framework\System\Config\Sources;
+namespace RA7\Framework\System\Config\Sources\FromFile;
+
+use RA7\Framework\System\Config\Sources\ConfigSourceInterface;
+use RA7\Framework\System\Config\Sources\ConfigSourceOptions;
 
 /**
  * Інтерфейс файлового джерела конфігурації.
@@ -13,7 +16,7 @@ namespace RA7\Framework\System\Config\Sources;
  */
 interface FileConfigSourceInterface extends ConfigSourceInterface {
 
-    /** Шлях до файлу джерела */
+    /** Шлях до файлу джерела (нормалізовано функцією `pathNormalize()` з пакета `ra7/utils_normalizers` при ініціалізації джерела) */
     public string $path {get;}
 
 
@@ -21,7 +24,7 @@ interface FileConfigSourceInterface extends ConfigSourceInterface {
     /**
      * Створити джерело конфігурації з файлу.
      *
-     * @param string $path шлях до файлу джерела
+     * @param string $path шлях до файлу джерела (автоматично нормалізується функцією `pathNormalize()` з пакета `ra7/utils_normalizers`)
      * @param ConfigSourceOptions $options опції джерела конфігурації
      */
     public function __construct(string $path, ConfigSourceOptions $options = new ConfigSourceOptions());

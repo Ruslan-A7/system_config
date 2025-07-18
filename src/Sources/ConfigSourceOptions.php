@@ -75,7 +75,7 @@ class ConfigSourceOptions {
      * а також для масивів та інших структур
      * @param bool $addCommentBeforeGroupInFile визначає необхідність додавати коментар з назвою групи перед групою ключів
      * @param bool $strictSetter визначає, чи допускається створення нових елементів при спробі встановити значення для неіснуючого ключа через метод set
-     * @param bool $final визначає, чи допускається модифікація цього джерела
+     * @param bool $final визначає, чи допускається модифікація цього джерела (якщо `true` - модифікацію заборонено)
      */
     public function __construct(
         SourceTypeEnum $type = SourceTypeEnum::File,
@@ -83,7 +83,7 @@ class ConfigSourceOptions {
         string $ns = NS,
         bool $addCommentBeforeGroupInFile = false,
         bool $strictSetter = false,
-        bool $final = false) {
+        bool $final = true) {
 
         $this->type = $type;
         $this->createSourceIfNotFound = $createSourceIfNotFound;

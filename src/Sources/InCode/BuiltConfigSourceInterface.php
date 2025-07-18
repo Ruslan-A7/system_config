@@ -1,6 +1,10 @@
 <?php
 
-namespace RA7\Framework\System\Config\Sources;
+namespace RA7\Framework\System\Config\Sources\InCode;
+
+use RA7\Framework\System\Config\Sources\ConfigSourceInterface;
+use RA7\Framework\System\Config\Sources\ConfigSourceOptions;
+use RA7\Framework\System\Config\Sources\SourceTypeEnum;
 
 /**
  * Інтерфейс джерела конфігурації, що вбудовується в PHP-код.
