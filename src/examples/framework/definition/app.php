@@ -1,4 +1,31 @@
 <?php
+// --------------------
+// Дані поточного сайту
+// --------------------
+
+/** Адреса сайту з незахищеним HTTP-доступом */
+define('HTTP_SERVER', "http://{$_SERVER['HTTP_HOST']}/");
+
+/** Адреса сайту з захищеним HTTPS-доступом */
+define('HTTPS_SERVER', "https://{$_SERVER['HTTP_HOST']}/");
+
+/** Домен сайту */
+define('SITE_DOMAIN', $_SERVER['HTTP_HOST']);
+
+// ----------------------------
+// Налаштування поточного сайту
+// ----------------------------
+
+/** Тема сайту */
+define('SITE_THEME', 'night');
+
+/** Мова сайту за замовчуванням */
+define('DEFAULT_LANGUAGE', 'uk');
+
+/** Локаль сайту за замовчуванням */
+define('DEFAULT_LOCALE', 'uk-UA');
+// define('TEST_DEF', {{PDO::ATTR_ERRMODE}});
+
 // -----------------------
 // Налаштування фреймворку
 // -----------------------
@@ -26,7 +53,7 @@ define('DESCRIPTION_HTTP_STATUS', 2);
  * - 5/'Production' - Активний
  * - 6/'Paused' - Призупинено для тех.обслуговування
  */
-define('LAUNCH_MODE', 2);
+define('LAUNCH_MODE', 1);
 
 /** Мова фреймворку за замовчуванням */
-define('FRAMEWORK_DEFAULT_LANG', 'uk');
+define('FRAMEWORK_DEFAULT_LANG', 'en');

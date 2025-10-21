@@ -10,7 +10,7 @@ return [
     'db_prefix' => 'sf_',
     'charset' => 'utf8mb4',
     'options' => [
-        {{PDO::ATTR_ERRMODE}} => {{PDO::ERRMODE_EXCEPTION}},// Установка режиму обробки помилок
+        {{PDO::ATTR_ERRMODE}} => PDO::ERRMODE_EXCEPTION,// Установка режиму обробки помилок
         {{PDO::ATTR_PERSISTENT}} => true,// Встановлюємо постійне підключення з БД
         {{PDO::ATTR_EMULATE_PREPARES}} => false,// Вимкнення емуляції підготовлених запитів (тобто будуть використовуватися реальні підготовлені запити на рівні БД, що покращує безпеку)
         //PDO::FETCH_ASSOC,// Формат повернення
