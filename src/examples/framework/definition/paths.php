@@ -33,5 +33,5 @@ define('DIR_INSTALL', DIR_SITE . 'install' . DS);
 /** Директорія з файлами оновлення додатку */
 define('DIR_UPDATE', DIR_SITE . 'update' . DS);
 
-/** Директорія з композер-пакетами додатку */
+/** Директорія з composer-пакетами додатку */
 define('DIR_PACKAGIST_VENDOR', DIR_SITE . 'vendor' . DS);
