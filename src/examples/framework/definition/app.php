@@ -46,14 +46,14 @@ define('DESCRIPTION_HTTP_STATUS', 2);
  * Режим запуску додатка.
  *
  * Допустимі значення:
- * - 1/'Development' - В розробці
- * - 2/'Closed' - Закрито
- * - 3/'Alpha' - Альфа-тестування
+ * - 1/'Production' - Активний
+ * - 2/'Paused' - Призупинено для тех.обслуговування
+ * - 3/'Closed' - Закрито
  * - 4/'Beta' - Бета-тестування
- * - 5/'Production' - Активний
- * - 6/'Paused' - Призупинено для тех.обслуговування
+ * - 5/'Alpha' - Альфа-тестування
+ * - 6/'Development' - В розробці
  */
-define('LAUNCH_MODE', 1);
+define('LAUNCH_MODE', 3);
 
 /** Мова фреймворку за замовчуванням */
 define('FRAMEWORK_DEFAULT_LANG', 'en');
