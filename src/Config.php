@@ -4,6 +4,8 @@ namespace RA7\Framework\System\Config;
 
 use RA7\Framework\Structure\Singleton\SingletonTrait;
 use RA7\Framework\System\Config\Sources\ConfigSourceInterface;
+use RA7\Framework\System\Config\Sources\FromFile\DefinedFileConfigSource;
+use RA7\Framework\System\Config\Sources\FromFile\ArrayFileConfigSource;
 
 /**
  * Універсальний клас конфігурації, що може складатися з джерел різних типів в будь-якій кількості.
@@ -26,6 +28,11 @@ class Config implements ConfigInterface {
      * @var array<string, ConfigSourceInterface>
      */
     public protected(set) array $sources = [];
+
+    /** Статус завантаження джерел конфігурації фреймворка */
+    public protected(set) bool $loadedFrameworkSources = false {
+        get => $this->loadedFrameworkSources;
+    }
 
 
 
@@ -66,6 +73,57 @@ class Config implements ConfigInterface {
     public function addSource(string $name, ConfigSourceInterface $source): void {
         $this->sources[$name] = $source;
     }
+
+
+
+    public function autoloadFrameworkSources(): bool {
+        if (!$this->loadedFrameworkSources) {
+            // Перед реєстрацією джерела конфігурації треба робити перевірку, чи він не був зареєстрований вже раніше,
+            // адже якщо якщо зареєструвати повторно одне й теж джерело з константами (або навіть різні джерела але з однаковими константами),
+            // то це видасть помилку ніби джерело не визначає жодної константи (адже при завантаженні файлу воно перевіряє,
+            // чи визначає файл хоч одну НОВУ констану, а якщо такі константи вже були визначені тому що раніше це джерело додавалось,
+            // то конфігуратор думає, що файл не визначає константи і видає помилку) !!!
+            if (!$this->getSource('app')) {
+                $this->addSource('app', new DefinedFileConfigSource(
+                    pathNormalize(__DIR__ . '/../../../../system/configs/framework/definition/app.php')
+                ));
+            }
+            if (!$this->getSource('paths')) {
+                $this->addSource('paths', new DefinedFileConfigSource(
+                    pathNormalize(__DIR__ . '/../../../../system/configs/framework/definition/paths.php')
+                ));
+            }
+            if (!$this->getSource('subdomains')) {
+                $this->addSource('subdomains', new DefinedFileConfigSource(
+                    pathNormalize(__DIR__ . '/../../../../system/configs/framework/definition/subdomains.php')
+                ));
+            }
+            if (!$this->getSource('logging')) {
+                $this->addSource('logging', new DefinedFileConfigSource(
+                    pathNormalize(__DIR__ . '/../../../../system/configs/framework/definition/logging.php')
+                ));
+            }
+            if (!$this->getSource('datetime')) {
+                $this->addSource('datetime', new ArrayFileConfigSource(
+                    pathNormalize(__DIR__ . '/../../../../system/configs/framework/arrays/datetime.php')
+                ));
+            }
+
+            foreach ($this->sources as $k => $source) {
+                if (!$source->loaded) {
+                    if (empty($source->load())) {
+                        return false;
+                    }
+                }
+            }
+
+            $this->loadedFrameworkSources = true;
+        }
+
+        return true;
+    }
+
+
 
     public function deleteSource(string $name): void {
         unset($this->sources[$name]);
