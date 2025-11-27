@@ -88,6 +88,40 @@ class Config implements ConfigInterface {
                     pathNormalize(__DIR__ . '/../../../../system/configs/framework/definition/app.php')
                 ));
             }
+            // Визначаємо рівень відображення помилок на основі режиму запуску додатка
+            switch (defined('LAUNCH_MODE') ? LAUNCH_MODE : null) {
+                case 1:
+                case 'Production':
+                    error_reporting(0);
+                    break;
+
+                case 2:
+                case 'Paused':
+                    error_reporting(0);
+                    break;
+
+                case 3:
+                case 'Closed':
+                    error_reporting(0);
+                    break;
+
+                case 4:
+                case 'Beta':
+                    error_reporting(E_ERROR | E_WARNING | E_PARSE);
+                    break;
+
+                case 5:
+                case 'Alpha':
+                    error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+                    break;
+
+                case 6:
+                case 'Development':
+                default:
+                    error_reporting(-1);
+                    break;
+            }
+
             if (!$this->getSource('paths')) {
                 $this->addSource('paths', new DefinedFileConfigSource(
                     pathNormalize(__DIR__ . '/../../../../system/configs/framework/definition/paths.php')
